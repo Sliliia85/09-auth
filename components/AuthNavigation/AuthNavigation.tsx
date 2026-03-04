@@ -1,6 +1,6 @@
 "use client"; import Link from 'next/link';
 import { useAuthStore } from '@/lib/store/authStore';
-import { logout } from '@/app/api/clientApi';
+import { logout } from '@/lib/api/clientApi';
 import css from './AuthNavigation.module.css';
 
 export const AuthNavigation = () => {

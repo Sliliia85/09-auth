@@ -1,7 +1,7 @@
 "use client"; import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
-import { updateMe } from '@/app/api/clientApi';
+import { updateMe } from '@/lib/api/clientApi';
 import styles from './EditProfilePage.module.css';
 
 export default function EditProfilePage() {

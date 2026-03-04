@@ -3,7 +3,7 @@
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link'; import { login as loginApi } from '@/app/api/clientApi';
+import Link from 'next/link'; import { login as loginApi } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import { User } from '@/types/user';
 import styles from './SignInPage.module.css';
