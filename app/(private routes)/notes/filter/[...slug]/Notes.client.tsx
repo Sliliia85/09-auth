@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
 import css from './Notes.module.css'; 
-import { fetchNotes } from '@/lib/api/clientApi';
+import { fetchNotes } from '@/app/api/clientApi';
 import Link from 'next/link';
 
 import SearchBox from '@/components/SearchBox/SearchBox';

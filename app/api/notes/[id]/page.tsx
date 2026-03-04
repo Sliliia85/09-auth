@@ -1,5 +1,5 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { fetchNoteById } from '@/lib/api/clientApi';
+import { fetchNoteById } from '@/app/api/clientApi';
 import NoteDetailsClient from './NoteDetails.client';
 import ModalWrapper from './ModalWrapper';
 import { Metadata } from 'next';

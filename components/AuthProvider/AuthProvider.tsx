@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, ReactNode } from 'react';
 import { useAuthStore } from '@/lib/store/authStore';
-import { checkSession } from '@/lib/api/clientApi';
+import { checkSession } from '@/app/api/clientApi';
 import { User } from '@/types/user';
 
 interface AuthResponse { user: User; }

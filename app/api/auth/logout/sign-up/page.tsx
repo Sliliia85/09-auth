@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { register as registerApi } from '@/lib/api/clientApi';
+import { register as registerApi } from '@/app/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import styles from './SignUpPage.module.css';
 import { User } from '@/types/user';

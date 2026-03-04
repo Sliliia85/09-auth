@@ -1,5 +1,5 @@
 "use client"; import { useQuery } from '@tanstack/react-query';
-import { fetchNotes } from '@/lib/api/clientApi';
+import { fetchNotes } from '@/app/api/clientApi';
 import Link from 'next/link';
 import { Note } from '@/types/note';
 
