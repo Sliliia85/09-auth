@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/Modal/Modal';
-import NoteDetails from '@/app/notes/[id]/NoteDetails.client';
+import NoteDetails from '@/app/(private routes)/notes/[id]/NoteDetails.client';
 
 export default function NoteModalClient() { const router = useRouter();
 
