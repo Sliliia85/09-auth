@@ -14,7 +14,11 @@ export interface UpdateUserRequest {
     
 export const register = async (payload: Partial<User>): Promise<AuthResponse> => {
     const { data } = await nextServer.post<AuthResponse>('/auth/register',
-        { username: payload.username, email: payload.email, password: payload.password, });
+        {
+            username: payload.username,
+            email: payload.email,
+            password: payload.password,
+        });
     return data;
 };
 
