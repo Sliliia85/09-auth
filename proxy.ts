@@ -4,11 +4,15 @@ import type { NextRequest } from 'next/server';
 const protectedRoutes = ['/', '/profile', '/notes'];
 const authRoutes = ['/sign-in', '/sign-up'];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const session = request.cookies.get('session')?.value;
     const { pathname } = request.nextUrl;
 
-    if (!session && protectedRoutes.some(route => pathname === route || pathname.startsWith('/notes/'))) {
+    const isProtectedRoute = protectedRoutes.some(route => 
+        pathname === route || pathname.startsWith('/notes/') || pathname.startsWith('/profile/')
+    );
+
+    if (!session && isProtectedRoute) {
         return NextResponse.redirect(new URL('/sign-in', request.url));
     }
 
@@ -19,5 +23,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
 }
 
+
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'], };
+    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+};
