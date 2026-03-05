@@ -2,12 +2,14 @@
 import { useAuthStore } from '@/lib/store/authStore';
 import { logout } from '@/lib/api/clientApi';
 import css from './AuthNavigation.module.css';
+import { useRouter } from 'next/navigation';
 
 export const AuthNavigation = () => {
     const { isAuthenticated, user, clearAuth } = useAuthStore();
+    const router = useRouter();
 
     const handleLogout = async () => {
-        await logout(); clearAuth(); window.location.href = '/sign-in';
+        await logout(); clearAuth(); router.push('/sign-in');
     };
 
     return (

@@ -8,20 +8,22 @@ import { useAuthStore } from '@/lib/store/authStore';
 import { User } from '@/types/user';
 import styles from './SignInPage.module.css';
 
+type SignInFormData = Partial<User> & { password?: string };
+
 export default function SignInPage() {
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Partial<User>>();
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignInFormData>();
     const router = useRouter();
     const setUser = useAuthStore((state) => state.setUser);
 
-    const onSubmit = async (data: Partial<User>) => {
+    const onSubmit = async (data: SignInFormData) => {
         try {
             const response = await loginApi({
-                email: data.email,
-                password: data.password,
+                email: data.email || '',
+                password: data.password || '',
             });
 
             setUser(response.user);
-            router.push('/');
+            router.push('/profile');
         } catch (error) {
             console.error('Login failed:', error);
             alert('Невірний email або пароль');
@@ -36,17 +38,18 @@ export default function SignInPage() {
             <label htmlFor="email">Email</label>
                     <input id="email" type="email" className={styles.input} {...register('email', {
                         required: 'Email обов\'язковий',
+                        
                         pattern: {
                             value: /^\S+@\S+$/i,
                             message: 'Некоректний формат email'
                         }
-                    })} placeholder="email@example.com" />
+                    })} name="email" placeholder="email@example.com" />
             {errors.email && <span className={styles.error}>{String(errors.email.message)}</span>}
             </div>
 
                 <div className={styles.formGroup}>
                     <label htmlFor="password">Пароль</label>
-                    <input id="password" type="password" className={styles.input} {...register('password', { required: 'Введіть пароль' })}
+                    <input id="password" type="password" className={styles.input} {...register('password', { required: 'Введіть пароль' })} name="password"
                         placeholder="Введіть пароль" />
             {errors.password && <span className={styles.error}>{String(errors.password.message)}</span>}
             </div>

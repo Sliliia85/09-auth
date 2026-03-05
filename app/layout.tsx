@@ -5,6 +5,7 @@ import { Header } from '@/components/Header/Header';
 import { Footer } from '@/components/Footer/Footer';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
 import { Roboto } from 'next/font/google';
+import { AuthProvider } from '@/components/AuthProvider/AuthProvider';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'], 
@@ -39,13 +40,15 @@ export default function RootLayout({ children, modal }: {children: React.ReactNo
     <html lang="en" className={roboto.variable}>
       <body className={roboto.className} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <TanStackProvider>
+          <AuthProvider>
           <Header />
           <main style={{ flex: 1 }}>
             {children}
           </main>
           {modal}
           <Footer />
-          <Toaster position="top-right" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
+            </AuthProvider>
         </TanStackProvider>
       </body>
     </html>

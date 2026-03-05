@@ -1,31 +1,18 @@
 'use client'; 
 
 import Link from 'next/link'; 
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import type { Note } from '@/types/note';
-import { deleteNote, fetchNotes } from '@/lib/api/clientApi'; 
+import { deleteNote } from '@/lib/api/clientApi'; 
 import css from './NoteList.module.css';
 
 interface NoteListProps {
-  tag?: string; 
   notes: Note[];
 }
 
-export default function NoteList({ tag }: NoteListProps) {
+export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
-
- const { data, isLoading, isError } = useQuery({
-  queryKey: ['notes', tag],
-  queryFn: () => {
-   
-    const activeTag = Array.isArray(tag) ? tag[0] : tag;
-    
-  
-    return fetchNotes({ tag: activeTag });
-  },
-});
-
 
   const deleteNoteMutation = useMutation({
     mutationFn: deleteNote,
@@ -43,11 +30,10 @@ export default function NoteList({ tag }: NoteListProps) {
       deleteNoteMutation.mutate(id);
     }
   };
+if (!notes || notes.length === 0) {
+return <div className={css.empty}>No notes found.</div>;
+}
 
-  if (isLoading) return <div className={css.loader}>Loading notes...</div>;
-  if (isError) return <div className={css.error}>Error loading notes.</div>;
-
-  const notes: Note[] = data?.notes || [];
 
   return (
     <ul className={css.list}>

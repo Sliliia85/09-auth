@@ -7,22 +7,20 @@ export interface AuthResponse {
     token?: string;
 }
 
+export type LoginRequest = Pick<User, 'email' | 'password'>;
+export type RegisterRequest = Pick<User, 'username' | 'email' | 'password'>;
+
 export interface UpdateUserRequest {
-    userName?: string;
+    username?: string;
     photoUrl?: string;
 }
     
-export const register = async (payload: Partial<User>): Promise<AuthResponse> => {
-    const { data } = await nextServer.post<AuthResponse>('/auth/register',
-        {
-            username: payload.username,
-            email: payload.email,
-            password: payload.password,
-        });
-    return data;
+export const register = async (payload: RegisterRequest): Promise<AuthResponse> => {
+const { data } = await nextServer.post<AuthResponse>('/auth/register', payload);
+return data;
 };
 
-export const login = async (payload: Partial<User>): Promise<AuthResponse> => {
+export const login = async (payload: LoginRequest): Promise<AuthResponse> => {
     const { data } = await nextServer.post<AuthResponse>('/auth/login', payload);
     return data;
 };
