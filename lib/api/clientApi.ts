@@ -7,8 +7,9 @@ export interface AuthResponse {
     token?: string;
 }
 
-export type LoginRequest = Pick<User, 'email' | 'password'>;
-export type RegisterRequest = Pick<User, 'username' | 'email' | 'password'>;
+export type LoginRequest = Pick<User, 'email'> & { password: string };
+
+export type RegisterRequest = Pick<User, 'username' | 'email'> & { password: string };
 
 export interface UpdateUserRequest {
     username?: string;
