@@ -17,15 +17,11 @@ export async function proxy(request: NextRequest) {
 
   const isAuthRoute = authRoutes.includes(pathname);
 
- 
   if (isProtectedRoute) {
-
-   
     if (!accessToken && !refreshToken) {
       return NextResponse.redirect(new URL('/sign-in', request.url));
     }
 
-  
     if (!accessToken && refreshToken) {
       const sessionResponse = await checkSession();
 
@@ -38,16 +34,19 @@ export async function proxy(request: NextRequest) {
       const setCookie = sessionResponse.headers['set-cookie'];
 
       if (setCookie) {
-        response.headers.set(
-    'set-cookie',
-    Array.isArray(setCookie) ? setCookie.join(',') : setCookie);
+        if (Array.isArray(setCookie)) {
+          setCookie.forEach((cookie) => {
+            response.headers.append('set-cookie', cookie);
+          });
+        } else {
+          response.headers.append('set-cookie', setCookie);
+        }
       }
 
       return response;
     }
   }
 
-  
   if (isAuthRoute && (accessToken || refreshToken)) {
     return NextResponse.redirect(new URL('/', request.url));
   }
