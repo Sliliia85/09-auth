@@ -43,11 +43,15 @@ export async function proxy(request: NextRequest) {
         const cookiesArray = Array.isArray(setCookie) ? setCookie : [setCookie];
 
         cookiesArray.forEach((cookie) => {
-          const [nameValue] = cookie.split(';');
-          const [name, value] = nameValue.split('=');
+  const [nameValue] = cookie.split(';');
 
-          response.cookies.set(name, value);
-        });
+  const separatorIndex = nameValue.indexOf('=');
+
+  const name = nameValue.substring(0, separatorIndex);
+  const value = nameValue.substring(separatorIndex + 1);
+
+  response.cookies.set(name, value);
+});
       }
 
       return response;
