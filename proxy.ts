@@ -6,36 +6,55 @@ const protectedRoutes = ['/profile', '/notes'];
 const authRoutes = ['/sign-in', '/sign-up'];
 
 export async function proxy(request: NextRequest) {
-const accessToken = request.cookies.get('accessToken')?.value;
-const refreshToken = request.cookies.get('refreshToken')?.value;
-const { pathname } = request.nextUrl;
+  const accessToken = request.cookies.get('accessToken')?.value;
+  const refreshToken = request.cookies.get('refreshToken')?.value;
 
-const isProtectedRoute = protectedRoutes.some(
-(route) => pathname === route || pathname.startsWith(`${route}/`)
-);
-const isAuthRoute = authRoutes.includes(pathname);
+  const { pathname } = request.nextUrl;
 
-    if (isProtectedRoute) {
-        if (!accessToken && !refreshToken) {
-            return NextResponse.redirect(new URL('/sign-in', request.url));
-        }
-if (!accessToken && refreshToken) {
-const isRefreshed = await checkSession();
-if (!isRefreshed) {
-return NextResponse.redirect(new URL('/sign-in', request.url));
-}
-return NextResponse.next();
-}
+  const isProtectedRoute = protectedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
 
-}
+  const isAuthRoute = authRoutes.includes(pathname);
 
-if (isAuthRoute && (accessToken || refreshToken)) {
-return NextResponse.redirect(new URL('/profile', request.url));
-}
+ 
+  if (isProtectedRoute) {
 
-return NextResponse.next();
+   
+    if (!accessToken && !refreshToken) {
+      return NextResponse.redirect(new URL('/sign-in', request.url));
+    }
+
+  
+    if (!accessToken && refreshToken) {
+      const sessionResponse = await checkSession();
+
+      if (!sessionResponse || sessionResponse.status !== 200) {
+        return NextResponse.redirect(new URL('/sign-in', request.url));
+      }
+
+      const response = NextResponse.next();
+
+      const setCookie = sessionResponse.headers['set-cookie'];
+
+      if (setCookie) {
+        response.headers.set(
+    'set-cookie',
+    Array.isArray(setCookie) ? setCookie.join(',') : setCookie);
+      }
+
+      return response;
+    }
+  }
+
+  
+  if (isAuthRoute && (accessToken || refreshToken)) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-matcher: ['/profile/:path*', '/notes/:path*', '/sign-in', '/sign-up'],
+  matcher: ['/profile/:path*', '/notes/:path*', '/sign-in', '/sign-up'],
 };
