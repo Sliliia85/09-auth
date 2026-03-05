@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { cookies } from 'next/headers';
 import { checkSession } from './lib/api/serverApi';
 
 const protectedRoutes = ['/profile', '/notes'];
 const authRoutes = ['/sign-in', '/sign-up'];
 
 export async function proxy(request: NextRequest) {
-  const accessToken = request.cookies.get('accessToken')?.value;
-  const refreshToken = request.cookies.get('refreshToken')?.value;
+  const cookieStore = await cookies();
+
+  const accessToken = cookieStore.get('accessToken')?.value;
+  const refreshToken = cookieStore.get('refreshToken')?.value;
 
   const { pathname } = request.nextUrl;
 
@@ -31,16 +34,20 @@ export async function proxy(request: NextRequest) {
 
       const response = NextResponse.next();
 
-      const setCookie = sessionResponse.headers['set-cookie'];
+      const setCookie = sessionResponse.headers['set-cookie'] as
+        | string
+        | string[]
+        | undefined;
 
       if (setCookie) {
-        if (Array.isArray(setCookie)) {
-          setCookie.forEach((cookie) => {
-            response.headers.append('set-cookie', cookie);
-          });
-        } else {
-          response.headers.append('set-cookie', setCookie);
-        }
+        const cookiesArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+
+        cookiesArray.forEach((cookie) => {
+          const [nameValue] = cookie.split(';');
+          const [name, value] = nameValue.split('=');
+
+          response.cookies.set(name, value);
+        });
       }
 
       return response;
