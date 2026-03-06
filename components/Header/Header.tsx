@@ -1,6 +1,7 @@
 'use client'; 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { AuthNavigation } from '../AuthNavigation/AuthNavigation';  
 import css from './Header.module.css';
 
 export const Header = () => {
@@ -17,6 +18,7 @@ export const Header = () => {
           <li className={css.navigationItem}>
             <Link href="/notes/filter/all" className={css.navigationLink} style={{ color: pathname.startsWith('/notes') ? '#ddd' : 'white' }}>Notes</Link>
           </li>
+          <AuthNavigation /> 
         </ul>
       </nav>
     </header>
